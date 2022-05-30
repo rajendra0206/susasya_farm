@@ -102,6 +102,7 @@ $route['deleteProperty'] = "property/deleteProperty";
 $route['saveContactInfo'] = "landing/saveContactInfo";
 
 $route['getPropertyData'] = "landing/getPropertyData";
+$route['userAuthWithPhone'] = "landing/userAuthWithPhone";
 
 
 /* End of file routes.php */

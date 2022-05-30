@@ -113,16 +113,24 @@
 <div class="modal fade" id="userCheckModal" tabindex="-1" role="dialog" aria-labelledby="userCheckModalLabel" aria-hidden="true">
    <div class="modal-dialog ">
        <div class="modal-content">
-           <div class="modal-header modal-headerStyl">
+          <div class="modal-header modal-headerStyl">
               <h5 class="modal-title modal-titlFntStyl">User Auth</h5>               
                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-           </div>
+          </div>
+          
           <div class="modal-body">
             <form id="checkUserForm" action="#" method="post">
-              <div class="form-group">
-                <label for="exampleInputEmail1">Mobile No,</label>
+              <!--<div class="form-group">
+                <label for="exampleInputEmail1">Mobile No</label>
                 <input type="tel" name="phoneno"  pattern="^\d{3}\d{3}\d{4}$" required class="form-control" id="mobileno" aria-describedby="phoneHelp" placeholder="Enter 10 digit phone number">
                 <small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>
+              </div>-->
+
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email Address</label>
+                <input type="text" name="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required class="form-control" id="auth_email" aria-describedby="phoneHelp" placeholder="Enter email address">
+                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>-->
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email address with anyone else.</small>
               </div>
               
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -166,14 +174,23 @@
 
         $(document).on('submit', '#checkUserForm', function(e){
             e.preventDefault();
-            console.log('we are here----');
+            
+            const email = $('#auth_email').val();
+            $form = $('#checkUserForm');
+            var serializedData = $form.serialize();
+            console.log(serializedData);
             $.ajax({
             url: 'userAuthWithPhone',
             type: 'POST',
-            data: postdata,
+            data: serializedData,
             datatype: 'json'
             })
-            .done(function (data) { console.log(data); })
+            .done(function (data) { 
+              
+              if(data === 'valid'){
+                window.location = "/susasya_farm";
+              }
+            })
             .fail(function (jqXHR, textStatus, errorThrown) { serrorFunction(); });
         });
     });
