@@ -188,7 +188,7 @@
             .done(function (data) { 
               
               if(data === 'valid'){
-                window.location = "/susasya_farm";
+                window.location = "/";
               }
             })
             .fail(function (jqXHR, textStatus, errorThrown) { serrorFunction(); });
