@@ -99,6 +99,12 @@ class Landing extends CI_Controller
         echo json_encode(array("data" => $dataArray));
     }
 
+    public function userAuthWithPhone(){
+        $email = $_POST['email'];       
+        //CODE TO SET COOKIE HERE
+        echo 'valid';
+    }
+
 }
 
 ?>
