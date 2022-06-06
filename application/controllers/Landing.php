@@ -111,7 +111,7 @@ class Landing extends CI_Controller
             setcookie("cookie_otp", $random_otp, time()+100);   
             
             //SEND OTP SMS CODE            
-            $URL1 = "https://182.18.168.112:8082/Rest/AIwebservice/Bulk";
+            $URL1 = "http://182.18.168.112:8082/Rest/AIwebservice/Bulk";
             $post_fields1 = array( 
                 'user' => urlencode('ravi1241'),
                 'password' => urlencode('Ravi@123'),
@@ -133,7 +133,15 @@ class Landing extends CI_Controller
             curl_setopt($ch1, CURLOPT_HEADER, true);	
         
             $RESULT=curl_exec($ch1);            
-                
+            // Check if any error occurred
+                if(curl_errno($ch1))
+                {
+                    echo 'Curl error: ' . curl_error($ch1);
+                }    
+                // Closing
+                curl_close($ch1);
+
+                var_dump($result);
             //END OF SEND OTP CODE
             
         }else{
