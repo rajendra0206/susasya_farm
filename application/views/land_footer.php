@@ -221,7 +221,7 @@
             var serializedData = $form.serialize();
             console.log(serializedData);
             $.ajax({
-            url: 'userAuthWithPhone',
+            url: '/userAuthWithPhone',
             type: 'POST',
             data: serializedData,
             datatype: 'json'

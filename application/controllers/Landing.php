@@ -108,11 +108,10 @@ class Landing extends CI_Controller
             //CODE TO SET COOKIE HERE
             $random_otp = rand(1111,9999);
             //$random_otp = 1978;
-            setcookie("cookie_otp", $random_otp, time()+1000);   
+            setcookie("cookie_otp", $random_otp, time()+100);   
             
-            //SEND OTP SMS CODE
-            
-            $URL1 = "http://182.18.168.112:8082/Rest/AIwebservice/Bulk";
+            //SEND OTP SMS CODE            
+            $URL1 = "https://182.18.168.112:8082/Rest/AIwebservice/Bulk";
             $post_fields1 = array( 
                 'user' => urlencode('ravi1241'),
                 'password' => urlencode('Ravi@123'),
