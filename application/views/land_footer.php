@@ -183,7 +183,7 @@
           const pid = $(this).attr('data-properyid');          
           let x = document.cookie;          
           if(x !== ''){
-            window.location = "/susasya_farm/propertyDetail/"+pid;
+            window.location = "/propertyDetail/"+pid;
           }
           $('#property_id').val(pid);
 
@@ -207,9 +207,9 @@
               $('.otpsection').show();
               $('#otp').prop('required',true);
               if(data === 'alive'){
-                window.location = "/susasya_farm/propertyDetail/"+pid;
+                window.location = "/propertyDetail/"+pid;
               }else if(data === 'died'){
-                window.location = "/susasya_farm/";
+                window.location = "/";
               }
 
             })
