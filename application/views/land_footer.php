@@ -171,6 +171,28 @@
    <link href="<?php echo base_url(); ?>assets/css/style.css" rel="stylesheet">
   <script>         
     $('#propertiesTable_wrapper').hide();
+
+    function getCookie(name) {
+    var dc = document.cookie;
+    var prefix = name + "=";
+    var begin = dc.indexOf("; " + prefix);
+    if (begin == -1) {
+        begin = dc.indexOf(prefix);
+        if (begin != 0) return null;
+    }
+    else
+    {
+        begin += 2;
+        var end = document.cookie.indexOf(";", begin);
+        if (end == -1) {
+        end = dc.length;
+        }
+    }
+    // because unescape has been deprecated, replaced with decodeURI
+    //return unescape(dc.substring(begin + prefix.length, end));
+    return decodeURI(dc.substring(begin + prefix.length, end));
+  } 
+
     $(document).ready(function() {
 
         $(document).on('click', '.usercheck', function(){
@@ -181,8 +203,10 @@
           $('#userCheckModal').modal('show');
 
           const pid = $(this).attr('data-properyid');          
-          let x = document.cookie;          
-          if(x !== ''){
+          let x = document.cookie;     
+          var myCookie = getCookie("cookie_otp");     
+          if (myCookie !== null) {
+           
             window.location = "/propertyDetail/"+pid;
           }
           $('#property_id').val(pid);
