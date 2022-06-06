@@ -99,6 +99,14 @@ class Property_model extends CI_Model
         return $query->result();        
     }
 
+    function getPropertyDetail($pid){
+        $this->db->select('*');
+        $this->db->from('tbl_properties');
+        $this->db->where('id', $pid);        
+        $query = $this->db->get();        
+        return $query->row();
+    }
+
 }
 
 ?>

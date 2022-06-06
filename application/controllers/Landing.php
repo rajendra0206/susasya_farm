@@ -87,7 +87,7 @@ class Landing extends CI_Controller
         foreach ($getOrderInfo as $element) { 
             if($element['farm_type'] == 1){ $farmtype = 'Empty land'; }elseif($element['farm_type'] == 2){ $farmtype = 'With Crop';  }else{ $farmtype = '-';}
             if($element['owner_type'] == 1){ $ownertype = 'Land Owner'; }elseif($element['owner_type'] == 2){ $ownertype = 'Agent';  }else{ $ownertype = '-';}
-            $more = '<a href="#" class="usercheck" id="userCheck" data-id="'.$element['id'].'">Read More</a>';
+            $more = '<a href="#" class="usercheck" id="userCheck" data-properyid="'.$element['id'].'">Read More</a>';
             $dataArray[] = array(
                 $farmtype,
                 $ownertype,                
@@ -100,9 +100,73 @@ class Landing extends CI_Controller
     }
 
     public function userAuthWithPhone(){
-        $email = $_POST['email'];       
-        //CODE TO SET COOKIE HERE
-        echo 'valid';
+        $phoneno = $_POST['phoneno'];       
+                
+        //next example will recieve all messages for specific conversation                
+        if($_POST['otp_no'] === ''){
+            
+            //CODE TO SET COOKIE HERE
+            $random_otp = rand(1111,9999);
+            //$random_otp = 1978;
+            setcookie("cookie_otp", $random_otp, time()+1000);   
+            
+            //SEND OTP SMS CODE
+            
+            $URL1 = "http://182.18.168.112:8082/Rest/AIwebservice/Bulk";
+            $post_fields1 = array( 
+                'user' => urlencode('ravi1241'),
+                'password' => urlencode('Ravi@123'),
+                'mobilenumber' => urlencode($phoneno),
+                'message' => urlencode('OTP to approve mobile verification code is : '.$random_otp.' as your susasya login. Do not Share it with anyone. susasya.in Narandra.'),
+                'sid' => urlencode('NARESU'),
+                'mtype' => urlencode('n')
+            );
+            $params = '';
+            foreach($post_fields1 as $key=>$value)
+            {
+                $params .= $key.'='.$value.'&';
+            }           
+            $params = trim($params, '&');	        
+            $ch1 = curl_init();
+            curl_setopt($ch1, CURLOPT_URL, $URL1.'?'.$params);
+            curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);	
+            curl_setopt($ch1, CURLOPT_CONNECTTIMEOUT , 7); //Timeout after 7 seconds
+            curl_setopt($ch1, CURLOPT_HEADER, true);	
+        
+            $RESULT=curl_exec($ch1);            
+                
+            //END OF SEND OTP CODE
+            
+        }else{
+            //echo $_COOKIE["cookie_otp"];
+            //Condition to check POST and Cookie OTP Both are same or not
+            if(($_POST['otp_no']) === $_COOKIE["cookie_otp"]){
+                //Conditio to check whether OTP expired or not?
+                if(!empty($_COOKIE["cookie_otp"])){
+                    echo "alive";
+                }else{
+                    echo "died";
+                }
+            }else{
+                echo "mismatch";
+            }           
+        }
+    }
+    //End of the function 
+
+    //Property details Page functionality
+    public function propertyDetail(){
+        if(!empty($_COOKIE["cookie_otp"])){
+            $propery_id = end($this->uri->segments);
+            $getPropertyData = $this->property_model->getPropertyDetail($propery_id);
+            $data['properyData'] = $getPropertyData;
+            $this->load->view('property_detail_header');         
+            $this->load->view('property_detail', $data);
+            $this->load->view('property_detail_footer'); 
+        }else{
+            header("Location: ".base_url()); /* Redirect browser */
+            exit();
+        }
     }
 
 }

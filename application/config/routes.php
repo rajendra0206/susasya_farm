@@ -103,6 +103,8 @@ $route['saveContactInfo'] = "landing/saveContactInfo";
 
 $route['getPropertyData'] = "landing/getPropertyData";
 $route['userAuthWithPhone'] = "landing/userAuthWithPhone";
+$route['propertyDetail'] = 'landing/propertyDetail';
+$route['propertyDetail/(:num)'] = 'landing/propertyDetail/$1';
 
 
 /* End of file routes.php */
