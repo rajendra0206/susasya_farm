@@ -203,7 +203,7 @@
             datatype: 'json'
             })
             .done(function (data) { 
-              console.log('---Data ---->', data);
+              
               $('.otpsection').show();
               $('#otp').prop('required',true);
               if(data === 'alive'){
