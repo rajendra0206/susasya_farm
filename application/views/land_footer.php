@@ -120,20 +120,26 @@
           
           <div class="modal-body">
             <form id="checkUserForm" action="#" method="post">
-              <!--<div class="form-group">
+              <div class="form-group">
                 <label for="exampleInputEmail1">Mobile No</label>
                 <input type="tel" name="phoneno"  pattern="^\d{3}\d{3}\d{4}$" required class="form-control" id="mobileno" aria-describedby="phoneHelp" placeholder="Enter 10 digit phone number">
                 <small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>
-              </div>-->
-
-              <div class="form-group">
-                <label for="exampleInputEmail1">Email Address</label>
-                <input type="text" name="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required class="form-control" id="auth_email" aria-describedby="phoneHelp" placeholder="Enter email address">
-                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>-->
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email address with anyone else.</small>
               </div>
-              
-              <button type="submit" class="btn btn-primary">Submit</button>
+
+              <div class="form-group otpsection" style="display:none;">                                
+                <input type="text" name="otp_no"  pattern="^\d{4}$" class="form-control" id="otp" aria-describedby="phoneHelp" placeholder="Enter OTP">
+                <small id="emailHelp" class="form-text text-success text-muted">OTP sent to your mobile number, Please enter OTP and submit to continue.</small>
+              </div>
+
+              <!--<div class="form-group">
+                <label for="exampleInputEmail1">Email Address</label>
+                <input type="text" name="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required class="form-control" id="auth_email" aria-describedby="phoneHelp" placeholder="Enter email address">                
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email address with anyone else.</small>
+              </div>-->
+              <input type="hidden" id="property_id">
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
             </form>
           </div>
            <div class="modal-footer">
@@ -166,16 +172,27 @@
   <script>         
     $('#propertiesTable_wrapper').hide();
     $(document).ready(function() {
+
         $(document).on('click', '.usercheck', function(){
           $('#mobileno').val('');
+          $('#otp').val('');
+          $('.otpsection').hide();
           $('#exampleModal').modal('hide');
           $('#userCheckModal').modal('show');
+
+          const pid = $(this).attr('data-properyid');          
+          let x = document.cookie;          
+          if(x !== ''){
+            window.location = "/susasya_farm/propertyDetail/"+pid;
+          }
+          $('#property_id').val(pid);
+
         });
 
         $(document).on('submit', '#checkUserForm', function(e){
             e.preventDefault();
-            
-            const email = $('#auth_email').val();
+            const pid = $('#property_id').val();
+            const mobileno = $('#mobileno').val();
             $form = $('#checkUserForm');
             var serializedData = $form.serialize();
             console.log(serializedData);
@@ -186,12 +203,17 @@
             datatype: 'json'
             })
             .done(function (data) { 
-              
-              if(data === 'valid'){
-                window.location = "/";
+              console.log('---Data ---->', data);
+              $('.otpsection').show();
+              $('#otp').prop('required',true);
+              if(data === 'alive'){
+                window.location = "/susasya_farm/propertyDetail/"+pid;
+              }else if(data === 'died'){
+                window.location = "/susasya_farm/";
               }
+
             })
-            .fail(function (jqXHR, textStatus, errorThrown) { serrorFunction(); });
+            .fail(function (jqXHR, textStatus, errorThrown) { $('.otpsection').hide(); serrorFunction(); });
         });
     });
 </script>  

@@ -251,6 +251,17 @@ div#preloader {
   margin: 0;
   max-height: 120px;
 }
+
+.single-well-Susasya ul li {
+  color: #444;
+  display: inline-grid !important;
+  padding: 5px 0;
+  font-size: 14px;
+  font-family: system-ui;
+  font-weight: 500;
+  padding: 10px 0;
+}
+
 @media (max-width: 768px) {
   #header {
     height: 64px;
