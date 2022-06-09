@@ -131,7 +131,7 @@ class Landing extends CI_Controller
             curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);	
             curl_setopt($ch1,CURLOPT_SSL_VERIFYHOST,0);
             curl_setopt($ch1,CURLOPT_SSL_VERIFYPEER,1);
-            curl_setopt($ch1, CURLOPT_CONNECTTIMEOUT , 7); //Timeout after 7 seconds
+            curl_setopt($ch1, CURLOPT_CONNECTTIMEOUT , 10); //Timeout after 7 seconds
             curl_setopt($ch1, CURLOPT_HEADER, true);	
         
             $RESULT=curl_exec($ch1);            
