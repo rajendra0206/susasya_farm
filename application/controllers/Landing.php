@@ -139,7 +139,7 @@ class Landing extends CI_Controller
             //var_dump($RESULT);    
             //$RESULT = true;  
             if($RESULT){
-                setcookie("cookie_otp", $random_otp, time()+100);
+                setcookie("cookie_otp", $random_otp, time()+1800);
                 echo "sent";
             }else{
                 echo "sentfail";
@@ -161,7 +161,7 @@ class Landing extends CI_Controller
             if(($_POST['otp_no']) === $_COOKIE["cookie_otp"]){
                 //Conditio to check whether OTP expired or not?
                 if(!empty($_COOKIE["cookie_otp"])){
-                    setcookie("cookie_alive", 'alive', time()+100);
+                    setcookie("cookie_alive", 'alive', time()+1800);
                     echo "alive";                    
                 }else{
                     echo "died";
