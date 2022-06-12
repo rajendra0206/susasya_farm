@@ -37,7 +37,7 @@
 
       <div class="logo">
         <!-- <h1><a href="index.html"><span>e</span>Business</a></h1> -->
-        <a href="index.html"><img src="<?php echo base_url(); ?>assets/img/susasya.png" alt="" class="img-fluid1"></a>
+        <a href="/"><img src="<?php echo base_url(); ?>assets/img/susasya.png" alt="" class="img-fluid1"></a>
       </div>
 
       
