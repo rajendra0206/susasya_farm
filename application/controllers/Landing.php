@@ -102,14 +102,14 @@ class Landing extends CI_Controller
     public function userAuthWithPhone(){
         $phoneno = $_POST['phoneno'];       
                 
-        //next example will recieve all messages for specific conversation                
-        if($_POST['otp_no'] === ''){
+        //next example will recieve all messages for specific conversation       
+        //echo "Test-->".$_COOKIE["cookie_alive"];         
+        if(($_POST['otp_no'] === '') && (empty($_COOKIE["cookie_alive"]))){
             
             //CODE TO SET COOKIE HERE
             $random_otp = rand(1111,9999);
             //$random_otp = 1978;
-            setcookie("cookie_otp", $random_otp, time()+100);   
-            
+                          
             //SEND OTP SMS CODE            
             $URL1 = "http://182.18.168.112:8082/Rest/AIwebservice/Bulk";
             $post_fields1 = array( 
@@ -134,25 +134,35 @@ class Landing extends CI_Controller
             curl_setopt($ch1, CURLOPT_CONNECTTIMEOUT , 10); //Timeout after 7 seconds
             curl_setopt($ch1, CURLOPT_HEADER, true);	
         
-            $RESULT=curl_exec($ch1);            
+            $RESULT=curl_exec($ch1); 
+            curl_close($ch1);  
+            //var_dump($RESULT);    
+            //$RESULT = true;  
+            if($RESULT){
+                setcookie("cookie_otp", $random_otp, time()+100);
+                echo "sent";
+            }else{
+                echo "sentfail";
+            }
             // Check if any error occurred
-                if(curl_errno($ch1))
-                {
-                    echo 'Curl error: ' . curl_error($ch1);
-                }    
-                // Closing
-                curl_close($ch1);
-
-                var_dump($result);
-            //END OF SEND OTP CODE
-            
+            /*if(curl_errno($ch1))
+            {
+                echo 'Curl error: ' . curl_error($ch1);
+                echo "sentfail";
+            }else{
+                echo "sent";
+            }*/
+            // Closing
+                        
+            //END OF SEND OTP CODE            
         }else{
             //echo $_COOKIE["cookie_otp"];
             //Condition to check POST and Cookie OTP Both are same or not
             if(($_POST['otp_no']) === $_COOKIE["cookie_otp"]){
                 //Conditio to check whether OTP expired or not?
                 if(!empty($_COOKIE["cookie_otp"])){
-                    echo "alive";
+                    setcookie("cookie_alive", 'alive', time()+100);
+                    echo "alive";                    
                 }else{
                     echo "died";
                 }
@@ -165,7 +175,7 @@ class Landing extends CI_Controller
 
     //Property details Page functionality
     public function propertyDetail(){
-        if(!empty($_COOKIE["cookie_otp"])){
+        if(!empty($_COOKIE["cookie_otp"]) && ($_COOKIE["cookie_alive"] === 'alive')){
             $propery_id = end($this->uri->segments);
             $getPropertyData = $this->property_model->getPropertyDetail($propery_id);
             $data['properyData'] = $getPropertyData;

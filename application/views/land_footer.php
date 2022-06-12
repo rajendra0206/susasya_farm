@@ -124,11 +124,15 @@
                 <label for="exampleInputEmail1">Mobile No</label>
                 <input type="tel" name="phoneno"  pattern="^\d{3}\d{3}\d{4}$" required class="form-control" id="mobileno" aria-describedby="phoneHelp" placeholder="Enter 10 digit phone number">
                 <small id="emailHelp" class="form-text text-muted">We'll never share your phone number with anyone else.</small>
+
+                <div class="text-danger smserror" style="display:none;">OTP not sent to this Phone number, Please try again after some time.</div>
               </div>
+
 
               <div class="form-group otpsection" style="display:none;">                                
                 <input type="text" name="otp_no"  pattern="^\d{4}$" class="form-control" id="otp" aria-describedby="phoneHelp" placeholder="Enter OTP">
-                <small id="emailHelp" class="form-text text-success text-muted">OTP sent to your mobile number, Please enter OTP and submit to continue.</small>
+                <small id="otpHelp" class="form-text" style="display:none;">OTP sent to your mobile number, Please enter OTP and submit to continue.</small>
+                <div class="text-danger smsotperror" style="display:none;">OTP is invalid. Plesae check the OTP you entered.</div>
               </div>
 
               <!--<div class="form-group">
@@ -201,12 +205,13 @@
           $('.otpsection').hide();
           $('#exampleModal').modal('hide');
           $('#userCheckModal').modal('show');
+          $('#otp').prop('required',false);
 
           const pid = $(this).attr('data-properyid');          
           let x = document.cookie;     
           var myCookie = getCookie("cookie_otp");     
-          if (myCookie !== null) {
-           
+          var otpCookie = getCookie('cookie_alive');
+          if (myCookie !== null && otpCookie != null) {           
             window.location = "/propertyDetail/"+pid;
           }
           $('#property_id').val(pid);
@@ -217,6 +222,9 @@
             e.preventDefault();
             const pid = $('#property_id').val();
             const mobileno = $('#mobileno').val();
+            $('#otp').prop('required',false);
+            $('.smsotperror').hide();
+            
             $form = $('#checkUserForm');
             var serializedData = $form.serialize();
             console.log(serializedData);
@@ -227,13 +235,19 @@
             datatype: 'json'
             })
             .done(function (data) { 
-              console.log('Return Data --->', data);
-              $('.otpsection').show();
-              $('#otp').prop('required',true);
-              if(data === 'alive'){
+
+              if(data === 'sent'){                               
+                $('#otp').prop('required',true);
+                $('.otpsection').show();
+                $('#otpHelp').show(); 
+              }else if(data === 'sentfail'){                
+                $('.smserror').show();
+              }else if(data === 'alive'){
                 window.location = "/propertyDetail/"+pid;
               }else if(data === 'died'){
-                window.location = "/";
+                window.location = "/";               
+              }else if(data === 'mismatch'){
+                $('.smsotperror').show();
               }
 
             })
